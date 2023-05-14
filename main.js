@@ -29,20 +29,20 @@ function addBtn(e) {
     email: email.value,
     number: number.value,
   };
-  axios.post('https://crudcrud.com/api/05f6f57cecf149e4880d09f199bdd9cd/user',obj)
-  .then((response)=>{
-    
- 
-    console.log(response.data)
-
-  })
-  .catch((err)=>{console.log(err)})
+  axios
+    .post("https://crudcrud.com/api/05f6f57cecf149e4880d09f199bdd9cd/user", obj)
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   let userDetails = JSON.stringify(obj);
   // console.log(userDetails);
 
   if (email.value !== "") {
     items.appendChild(newELement);
-   
+
     localStorage.setItem(obj.email, userDetails);
     newELement.appendChild(deleteBtn);
     newELement.appendChild(editBtn);
@@ -73,3 +73,60 @@ function addBtn(e) {
     email.value = obj.email;
   }
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+  axios
+    .get("https://crudcrud.com/api/05f6f57cecf149e4880d09f199bdd9cd/user")
+    .then((response) => {
+   
+
+      for (let i = 0; i < response.data.length; i++) {
+        let items = document.getElementById("items");
+        let newELement = document.createElement("li");
+        newELement.innerHTML = `<span>${JSON.stringify((response.data[i]).name)}</span>${JSON.stringify((response.data[i]).email)} <span></span>${JSON.stringify((response.data[i]).number)}<span></span>`;
+        items.appendChild(newELement)
+        let deleteBtn = document.createElement("button");
+        deleteBtn.innerHTML = "Delete";
+        deleteBtn.className = "btn btn-danger mr-2";
+  
+        //edit btn
+        let editBtn = document.createElement("button");
+        editBtn.innerHTML = "Edit";
+        editBtn.className = "btn btn-dark mr-2";
+        newELement.appendChild(deleteBtn)
+        newELement.appendChild(editBtn)
+
+        deleteBtn.addEventListener("click", deleteBtnClick);
+
+      function deleteBtnClick(e) {
+        e.preventDefault();
+        deleteBtn.parentElement.remove();
+        console.log(obj.email);
+    
+        localStorage.removeItem(obj.email);
+        // document.getElementById('items').innerHTML=emailLocal
+      }
+    
+      //edit button
+    
+      editBtn.addEventListener("click", edit);
+    
+      function edit(e) {
+        console.log("edit");
+        editBtn.parentElement.remove();
+        name1.value = obj.name;
+        email.value = obj.email;}
+      }
+
+      console.log(JSON.stringify((response.data[0].name)));
+     
+      
+
+
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+    
+});
