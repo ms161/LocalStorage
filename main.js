@@ -78,55 +78,64 @@ window.addEventListener("DOMContentLoaded", () => {
   axios
     .get("https://crudcrud.com/api/05f6f57cecf149e4880d09f199bdd9cd/user")
     .then((response) => {
-   
-
       for (let i = 0; i < response.data.length; i++) {
         let items = document.getElementById("items");
         let newELement = document.createElement("li");
-        newELement.innerHTML = `<span>${JSON.stringify((response.data[i]).name)}</span>${JSON.stringify((response.data[i]).email)} <span></span>${JSON.stringify((response.data[i]).number)}<span></span>`;
-        items.appendChild(newELement)
+        newELement.innerHTML = `<span>${JSON.stringify(
+          response.data[i].name
+        )}</span>${JSON.stringify(
+          response.data[i].email
+        )} <span></span>${JSON.stringify(
+          response.data[i].number
+        )}<span></span>`;
+        items.appendChild(newELement);
         let deleteBtn = document.createElement("button");
         deleteBtn.innerHTML = "Delete";
         deleteBtn.className = "btn btn-danger mr-2";
-  
+
         //edit btn
         let editBtn = document.createElement("button");
         editBtn.innerHTML = "Edit";
         editBtn.className = "btn btn-dark mr-2";
-        newELement.appendChild(deleteBtn)
-        newELement.appendChild(editBtn)
+        newELement.appendChild(deleteBtn);
+        newELement.appendChild(editBtn);
 
         deleteBtn.addEventListener("click", deleteBtnClick);
 
-      function deleteBtnClick(e) {
-        e.preventDefault();
-        deleteBtn.parentElement.remove();
-        console.log(obj.email);
-    
-        localStorage.removeItem(obj.email);
-        // document.getElementById('items').innerHTML=emailLocal
+        function deleteBtnClick(e) {
+          e.preventDefault();
+          deleteBtn.parentElement.remove();
+
+          console.log(response.data[i]._id);
+          //deleting from CrudCrud///////////////////////////////////////
+          //deleting from CrudCrud///////////////////////////////////////
+          //deleting from CrudCrud///////////////////////////////////////
+          axios
+          .delete(`https://crudcrud.com/api/05f6f57cecf149e4880d09f199bdd9cd/user/${response.data[i]._id}`)
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+         
+        }
+
+        //edit button
+
+        editBtn.addEventListener("click", edit);
+
+        function edit(e) {
+          console.log("edit");
+          editBtn.parentElement.remove();
+          name1.value = obj.name;
+          email.value = obj.email;
+        }
       }
-    
-      //edit button
-    
-      editBtn.addEventListener("click", edit);
-    
-      function edit(e) {
-        console.log("edit");
-        editBtn.parentElement.remove();
-        name1.value = obj.name;
-        email.value = obj.email;}
-      }
 
-      console.log(JSON.stringify((response.data[0].name)));
-     
-      
-
-
+      // console.log(response.data._id);
     })
     .catch((err) => {
       console.log(err);
     });
-
-    
 });
